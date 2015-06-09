@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby -w
+# set ft=ruby
+$:<< 'lib'
+require 'yamlsh'
+
+def show_program_name(out = $stdout)
+  out.puts "# yamlsh - Franck Verrot <franck@verrot.fr> - MIT License - 2015"
+end
+
+def show_banner(out = $stdout)
+  show_program_name(out)
+  out.puts <<-EOS
+  usage: yamlsh <yaml file>
+  EOS
+end
+
+if ARGV.length != 1
+  show_banner
+  puts "Missing yaml file argument"
+  exit 1
+else
+  home = ENV.fetch('HOME','~/')
+  history_file = ENV.fetch('HISTORY_FILE', File.join(home, '.yamlsh_history'))
+  Yamlsh::CLI.new(ARGV.shift, history_file).run
+  exit 0
+end
